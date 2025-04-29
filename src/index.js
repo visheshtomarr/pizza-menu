@@ -75,11 +75,17 @@ function Menu() {
         <main className="menu">
             <h2>Our Menu</h2>
             {numPizzas > 0 ? (
-                <ul className="pizzas">
-                    {pizzas.map(pizza => (
-                        <Pizza pizzaObj={pizza} key={pizza.name} />
-                    ))}
-                </ul>
+                <>
+                    <p>
+                        Authentic Italian pizzas. {numPizzas} pizzas to choose from. All from our stone
+                        oven, all organic and delicious.
+                    </p>
+                    <ul className="pizzas">
+                        {pizzas.map(pizza => (
+                            <Pizza pizzaObj={pizza} key={pizza.name} />
+                        ))}
+                    </ul>
+                </>
             ) : (
                 <p>
                     We are still working on our menu. Please come back later :)
@@ -97,14 +103,7 @@ function Footer() {
     console.log(isOpen, hours);
     return (
         <footer className="footer">
-            {isOpen ? (
-                <div className="order">
-                    <p>
-                        We are open until {closeHrs}:00. Come visit us or order online.
-                    </p>
-                    <button className="btn">Open</button>
-                </div>
-            ) : (
+            {isOpen ? <Order openHours={openHrs} closeHours={closeHrs} /> : (
                 <p>
                     We are happy to welcome you between {openHrs}:00 and {closeHrs}:00.
                 </p>
@@ -113,14 +112,25 @@ function Footer() {
     );
 }
 
+function Order({ openHours, closeHours }) {
+    return (
+        <div className="order">
+            <p>
+                We are open from {openHours}:00 until {closeHours}:00. Come visit us or order online.
+            </p>
+            <button className="btn">Order</button>
+        </div>
+    );
+}
+
 function Pizza({ pizzaObj }) {
     return (
-        <li className="pizza">
+        <li className={`pizza ${pizzaObj.soldOut ? 'sold-out' : ''}`}>
             <img src={pizzaObj.photoName} alt={pizzaObj.name} />
             <div>
                 <h3>{pizzaObj.name}</h3>
                 <p>{pizzaObj.ingredients}</p>
-                <span>{pizzaObj.price}</span>
+                <span>{pizzaObj.soldOut ? 'SOLD OUT' : pizzaObj.price}</span>
             </div>
         </li>
     );
